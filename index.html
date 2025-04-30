@@ -1,30 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Work Day Tracker</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .time {
+            font-size: 30px;
+            margin-top: 20px;
+        }
+        .message {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🌞 Welcome to Your Work Day</h1>
-    <label for="start-time">🕒 Enter Start Time:</label>
-    <input type="time" id="start-time">
-    <button onclick="startDay()">Start My Day</button>
-    <div id="status"></div>
-  </div>
 
-  <script>
-    function startDay() {
-      const time = document.getElementById("start-time").value;
-      if (!time) {
-        document.getElementById("status").innerText = "⛔ Please enter a time!";
-        return;
-      }
-      document.getElementById("status").innerText = `✅ Day started at ${time}. AI is tracking!`;
-      
-      // هنا نرسل الوقت لـ Colab أو API لاحقًا
-    }
-  </script>
+    <div class="container">
+        <h1>Time Tracker</h1>
+        <button class="btn" id="startButton">Start</button>
+        <div class="time" id="timer">08:00:00</div>
+        <div class="message" id="motivationalMessage">ابدأ العمل وسوف تنجز الكثير!</div>
+    </div>
+
+    <script>
+        let timer;
+        let remainingTime = 8 * 60 * 60; // 8 hours in seconds
+        let isRunning = false;
+        const motivationalMessages = [
+            "أنت قادر على إنجاز الكثير!",
+            "استمر في العمل، أنت على الطريق الصحيح!",
+            "كل دقيقة مهمة، استمر في التركيز!",
+            "النجاح يأتي بالعمل المستمر!",
+            "أنت تقريبًا هناك، فقط استمر!"
+        ];
+
+        const startButton = document.getElementById('startButton');
+        const timerDisplay = document.getElementById('timer');
+        const messageDisplay = document.getElementById('motivationalMessage');
+
+        startButton.onclick = function() {
+            if (!isRunning) {
+                isRunning = true;
+                startButton.textContent = "Stop";
+                startTimer();
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                startButton.textContent = "Start";
+            }
+        };
+
+        function startTimer() {
+            timer = setInterval(function() {
+                remainingTime--;
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = remainingTime % 60;
+                timerDisplay.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    messageDisplay.textContent = "لقد أكملت 8 ساعات! رائع!";
+                } else {
+                    updateMotivationalMessage();
+                }
+            }, 1000);
+        }
+
+        function pad(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        function updateMotivationalMessage() {
+            if (remainingTime % 3600 === 0) {  // Every hour
+                const randomIndex = Math.floor(Math.random() * motivationalMessages.length);
+                messageDisplay.textContent = motivationalMessages[randomIndex];
+            }
+        }
+    </script>
 </body>
 </html>
