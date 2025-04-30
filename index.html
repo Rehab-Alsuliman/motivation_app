@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Work Day Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🌞 Welcome to Your Work Day</h1>
+    <label for="start-time">🕒 Enter Start Time:</label>
+    <input type="time" id="start-time">
+    <button onclick="startDay()">Start My Day</button>
+    <div id="status"></div>
+  </div>
+
+  <script>
+    function startDay() {
+      const time = document.getElementById("start-time").value;
+      if (!time) {
+        document.getElementById("status").innerText = "⛔ Please enter a time!";
+        return;
+      }
+      document.getElementById("status").innerText = `✅ Day started at ${time}. AI is tracking!`;
+      
+      // هنا نرسل الوقت لـ Colab أو API لاحقًا
+    }
+  </script>
+</body>
+</html>
